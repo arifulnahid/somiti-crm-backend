@@ -21,12 +21,12 @@ return new class extends Migration
             $table->string('birth_id')->nullable();
             $table->string('passport_id')->nullable();
             $table->boolean('is_active')->default(false);
-            $table->enum('role', ['super_admin', 'admin', 'manager', 'volunteer', 'member']);
+            $table->enum('role', ['super_admin', 'admin', 'manager', 'volunteer', 'member'])->default('member');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->jsonb('meta');
+            $table->jsonb('meta')->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
