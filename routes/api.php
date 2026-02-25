@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\AddressController;
+use App\Http\Controllers\API\BranchController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -8,7 +10,18 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::prefix('user')->controller(UserController::class)->group(function () {
+    Route::post('/register', 'store');
+    Route::post('/login', 'login');
+    Route::post('/logout', 'logout');
+});
 
-Route::post('/user', [UserController::class, 'store']);
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/logout', [UserController::class, 'logout']);
+Route::prefix('address')->controller(AddressController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/create', 'store');
+});
+
+Route::prefix('branch')->controller(BranchController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/create', 'store');
+});
