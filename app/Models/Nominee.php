@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Nominee extends Model
 {
-    protected $table = 'nominee';
-
     protected $fillable = [
         'user_id',
         'member_id',
