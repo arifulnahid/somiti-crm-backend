@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -20,7 +21,9 @@ class Transaction extends Model
         'status',
         'success',
         'sender_id',
+        'sender_type',
         'receiver_id',
+        'receiver_type',
         'description',
         'meta',
     ];
@@ -40,13 +43,13 @@ class Transaction extends Model
         });
     }
 
-    public function sender(): BelongsTo
+    public function sender(): MorphTo
     {
-        return $this->belongsTo(User::class, 'sender_id');
+        return $this->morphTo();
     }
 
-    public function receiver(): BelongsTo
+    public function receiver(): MorphTo
     {
-        return $this->belongsTo(User::class, 'receiver_id');
+        return $this->morphTo();
     }
 }

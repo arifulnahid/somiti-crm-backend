@@ -25,8 +25,8 @@ return new class extends Migration
             $table->enum('status', array_column(TransactionStatus::cases(), 'value'))->default(TransactionStatus::PENDING);
             $table->boolean('success')->default(false);
 
-            $table->foreignId('sender_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('receiver_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->nullableMorphs('sender');
+            $table->nullableMorphs('receiver');
 
             $table->longText('description')->nullable();
             $table->json('meta')->nullable();
