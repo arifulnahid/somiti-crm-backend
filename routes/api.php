@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AddressController;
 use App\Http\Controllers\API\BranchController;
+use App\Http\Controllers\API\MemberController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,3 +26,5 @@ Route::prefix('branch')->controller(BranchController::class)->group(function () 
     Route::get('/', 'index');
     Route::post('/create', 'store');
 });
+
+Route::apiResource('members', MemberController::class);
