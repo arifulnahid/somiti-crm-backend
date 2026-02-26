@@ -39,7 +39,7 @@ class UserController extends Controller
      * Login User
      */
 
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $request->validate([
             'username' => 'required|string',
@@ -65,7 +65,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         $request->user()->tokens()->delete();
 
