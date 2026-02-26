@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AddressController;
 use App\Http\Controllers\API\BranchController;
 use App\Http\Controllers\API\MemberController;
+use App\Http\Controllers\API\NomineeController;
 use App\Http\Controllers\API\SocietyController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
@@ -30,3 +31,4 @@ Route::prefix('branch')->controller(BranchController::class)->group(function () 
 
 Route::apiResource('members', MemberController::class);
 Route::apiResource('societies', SocietyController::class);
+Route::apiResource('nominees', NomineeController::class);

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('fathers_name');
             $table->string('mothers_name');
+            $table->enum('gender', ['male', 'female', 'none']);
 
             $table->foreignId('permanent_address')->nullable()->constrained('addresses')->nullOnDelete();
             $table->foreignId('present_address')->nullable()->constrained('addresses')->nullOnDelete();
