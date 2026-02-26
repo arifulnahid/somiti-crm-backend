@@ -22,7 +22,7 @@ class StoreSocietyRequest extends FormRequest
     public function rules(): array
     {
          return [
-            'name' => 'required|string|max:255|unique:society,name',
+            'name' => 'required|string|max:255|unique:societies,name',
             'logo' => 'nullable|string|max:255',
             'cover_image' => 'nullable|string|max:255',
             'description' => 'required|string',

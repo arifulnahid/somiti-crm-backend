@@ -23,11 +23,11 @@ class StoreMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'uuid' => 'required|string|unique:members,uui',
+            'uuid' => 'required|string|unique:members,uuid',
             'user_id' => 'nullable|exists:users,id',
             'fathers_name' => 'required|string|max:255',
             'mothers_name' => 'required|string|max:255',
-            'permanent_address' => 'nullable|exists:address,id',
+            'permanent_address' => 'nullable|exists:addresses,id',
             'present_address' => 'nullable|exists:addresses,id',
             'branch_id' => 'nullable|exists:branches,id',
             'nominees' => 'nullable|array',

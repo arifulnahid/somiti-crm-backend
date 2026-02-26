@@ -11,7 +11,7 @@ enum Occupation: string
     case BANKER = 'banker';
     case NGO_WORKER = 'ngo_worker';
     case DRIVER = 'driver';
-    case BUSINESSMAN = 'businessman';
+    case BUSINESS = 'business';
     case EXPETRIATE = 'expetriate';
     case GOVT_SERVICE = 'govt_service';
     case PRIVATE_JOB = 'private_job';
