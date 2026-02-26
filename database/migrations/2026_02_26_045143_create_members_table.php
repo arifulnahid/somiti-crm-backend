@@ -25,7 +25,7 @@ return new class extends Migration
 
             $table->jsonb('nominees')->nullable();
 
-            $table->foreignId('society_id')->nullable()->constrained('societies')->nullOnDelete();
+            $table->foreignId('society_id')->nullable();
 
             $table->enum('occupation', array_column(Occupation::cases(), 'value'))->default(Occupation::NONE->value)->nullable();
             $table->enum('type', ['general', 'student'])->default('general');
@@ -47,10 +47,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('member_id')->nullable()->constrained('members')->nullOnDelete();
-            $table->int('scores')->default(0);
-            $table->int('green')->default(0);
-            $table->int('yellow')->default(0);
-            $table->int('red')->default(0);
+            $table->integer('scores')->default(0);
+            $table->integer('green')->default(0);
+            $table->integer('yellow')->default(0);
+            $table->integer('red')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestampsTz();
         });
