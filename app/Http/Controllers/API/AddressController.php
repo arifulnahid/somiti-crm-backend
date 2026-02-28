@@ -45,7 +45,11 @@ class AddressController extends Controller
      */
     public function show(Address $address)
     {
-        //
+        return response()->json([
+            'status' => true,
+            'message' => 'Address',
+            'data' => $address,
+        ], 200);
     }
 
     /**
@@ -53,7 +57,11 @@ class AddressController extends Controller
      */
     public function update(UpdateAddressRequest $request, Address $address)
     {
-        //
+        $validated = $request->validated();
+
+        $address->update($validated);
+
+        return response()->json($address);
     }
 
     /**
@@ -61,6 +69,17 @@ class AddressController extends Controller
      */
     public function destroy(Address $address)
     {
-        //
+        $address->delete();
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Deleted Successfully',
+                'data' => [
+                    'id' => $address->id
+                ]
+            ],
+            200
+        );
     }
 }

@@ -17,7 +17,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Users',
+            'data' => $users,
+        ]);
     }
 
     /**
@@ -62,6 +68,17 @@ class UserController extends Controller
             'message' => 'Login Successfully',
             'token' => $token,
             'user' => $user
+        ], 200);
+    }
+
+    /**
+     * Auth me
+     */
+    public function auth(Request $request): JsonResponse
+    {
+        return response()->json([
+            'message' => 'Authenticated Successfully',
+            'data' => $request->user()
         ]);
     }
 
