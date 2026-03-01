@@ -33,6 +33,8 @@ class AddressController extends Controller
 
         $address = Address::create($data);
 
+        return $this->createdResponse($address, "created");
+
         return response()->json([
             'status' => true,
             'message' => 'Address Create Successfully',
