@@ -7,20 +7,22 @@ use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
 use App\Models\Address;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        Log::info($request->query());
         $address = Address::all();
 
         return response()->json([
-            'status' => true,
-            'message' => 'Address',
             'data' => $address,
+            'total' => $address->count()
         ]);
     }
 
@@ -83,5 +85,17 @@ class AddressController extends Controller
             ],
             200
         );
+    }
+
+    public function divisions()
+    {
+        // $addresses = Address::seletct('division', 'district')->distinct()->get();
+
+        $address = Address::all('division', 'district')->groupBy('division')
+        ->map(function ($items) {
+            return $items->pluck('district')->unique()->values();
+        });
+
+        return response()->json($address);
     }
 }

@@ -27,14 +27,17 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
 Route::prefix('address')->controller(AddressController::class)->group(function () {
     Route::get('/', 'index');
     Route::post('/', 'store');
+    Route::get('/divisions', 'divisions');
     Route::patch('/{address}', 'update');
     Route::get('/{address}', 'show');
     Route::delete('/{address}', 'destroy');
 });
 
-Route::prefix('branch')->controller(BranchController::class)->group(function () {
+Route::prefix('branches')->controller(BranchController::class)->group(function () {
     Route::get('/', 'index');
-    Route::post('/create', 'store');
+    Route::post('/', 'store');
+    Route::get('/{branch}', 'show');
+    Route::patch('/{branch}', 'update');
 });
 
 Route::apiResource('members', MemberController::class);

@@ -24,7 +24,7 @@ class StoreBranchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
+            'name' => ['required', 'string', 'unique:branches,name'],
             'address_id' => ['required', 'exists:addresses,id'],
             'type' => ['required', new Enum(BranchType::class)],
             'manager' => ['required', 'exists:users,id'],

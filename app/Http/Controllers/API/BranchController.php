@@ -7,6 +7,7 @@ use App\Models\Branch;
 use App\Http\Requests\StoreBranchRequest;
 use App\Http\Requests\UpdateBranchRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class BranchController extends Controller
 {
@@ -45,7 +46,11 @@ class BranchController extends Controller
      */
     public function show(Branch $branch)
     {
-        //
+        return response()->json([
+            'status' => true,
+            'message' => 'Branch',
+            'data' => $branch,
+        ]);
     }
 
     /**
@@ -53,7 +58,15 @@ class BranchController extends Controller
      */
     public function update(UpdateBranchRequest $request, Branch $branch)
     {
-        //
+        $validated = $request->validated();
+
+        $branch->update($validated);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Branch Updated',
+            'data' => $branch,
+        ], Response::HTTP_OK);
     }
 
     /**
