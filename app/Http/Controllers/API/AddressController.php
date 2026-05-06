@@ -6,6 +6,8 @@ use App\Filters\V1\AddressFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
+use App\Http\Resources\AddressCollection;
+use App\Http\Resources\AddressResource;
 use App\Models\Address;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,7 +24,7 @@ class AddressController extends Controller
 
         $address = Address::query()->where($filterItems)->paginate();
 
-        return $this->successResponse($address, 'Successfully Indexed');
+        return $this->successResponse(AddressResource::collection($address)->response()->getData(true), 'Successfully retrive address');
     }
 
     /**
@@ -42,6 +44,8 @@ class AddressController extends Controller
      */
     public function show(Address $address)
     {
+        return $this->successResponse(new AddressResource($address), 'Address get successfully');
+
         return response()->json([
             'status' => true,
             'message' => 'Address',

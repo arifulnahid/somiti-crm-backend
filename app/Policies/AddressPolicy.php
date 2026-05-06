@@ -20,7 +20,7 @@ class AddressPolicy
      */
     public function view(?User $user, Address $address): bool
     {
-        return true;
+        return false;
     }
 
     /**
