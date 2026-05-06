@@ -12,12 +12,17 @@ use Illuminate\Http\Request;
 
 class AddressController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Address::class, 'address');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): JsonResponse
     {
-        $filter = new AddressFilter();
+        $filter = new AddressFilter;
         $filterItems = $filter->transform($request);
 
         $address = Address::query()->where($filterItems)->paginate();
@@ -34,7 +39,7 @@ class AddressController extends Controller
 
         $address = Address::create($data);
 
-        return $this->createdResponse($address, "created");
+        return $this->createdResponse($address, 'created');
     }
 
     /**
@@ -73,8 +78,8 @@ class AddressController extends Controller
                 'success' => true,
                 'message' => 'Deleted Successfully',
                 'data' => [
-                    'id' => $address->id
-                ]
+                    'id' => $address->id,
+                ],
             ],
             200
         );
