@@ -2,26 +2,27 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Filters\V1\AddressFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
 use App\Models\Address;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $address = Address::all();
+        $filter = new AddressFilter();
+        $filterItems = $filter->transform($request);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Address',
-            'data' => $address,
-        ]);
+        $address = Address::query()->where($filterItems)->paginate();
+
+        return $this->successResponse($address, 'Successfully Indexed');
     }
 
     /**
@@ -34,12 +35,6 @@ class AddressController extends Controller
         $address = Address::create($data);
 
         return $this->createdResponse($address, "created");
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Address Create Successfully',
-            'data' => $address,
-        ], 201);
     }
 
     /**
@@ -71,7 +66,7 @@ class AddressController extends Controller
      */
     public function destroy(Address $address)
     {
-        $address->delete();
+        $address->delete($address->id);
 
         return response()->json(
             [
