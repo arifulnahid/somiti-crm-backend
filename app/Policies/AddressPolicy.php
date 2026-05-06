@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Address;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class AddressPolicy
 {
@@ -21,7 +20,7 @@ class AddressPolicy
      */
     public function view(?User $user, Address $address): bool
     {
-        return false;
+        return true;
     }
 
     /**

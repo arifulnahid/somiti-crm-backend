@@ -25,10 +25,10 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
 });
 
 Route::prefix('address')->controller(AddressController::class)->group(function () {
-    Route::get('/', 'index');
+    Route::get('/', 'index')->can('viewAny,App\Models\Address');
     Route::post('/', 'store');
     Route::patch('/{address}', 'update');
-    Route::get('/{address}', 'show');
+    Route::get('/{address}', 'show')->can('view,address');
     Route::delete('/{address}', 'destroy');
 });
 
