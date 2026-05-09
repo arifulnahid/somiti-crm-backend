@@ -12,10 +12,6 @@ use App\Models\Address;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-<<<<<<< HEAD
-use Illuminate\Support\Facades\Log;
-=======
->>>>>>> origin/filter
 
 class AddressController extends Controller
 {
@@ -24,22 +20,12 @@ class AddressController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-<<<<<<< HEAD
-        Log::info($request->query());
-        $address = Address::all();
-
-        return response()->json([
-            'data' => $address,
-            'total' => $address->count()
-        ]);
-=======
         $filter = new AddressFilter;
         $filterItems = $filter->transform($request);
 
         $address = Address::query()->where($filterItems)->paginate();
 
         return $this->successResponse(AddressResource::collection($address)->response()->getData(true), 'Successfully retrive address');
->>>>>>> origin/filter
     }
 
     /**
