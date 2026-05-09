@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Filters\V1\AddressFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
+use App\Http\Resources\AddressCollection;
+use App\Http\Resources\AddressResource;
 use App\Models\Address;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Log;
+=======
+>>>>>>> origin/filter
 
 class AddressController extends Controller
 {
@@ -18,6 +24,7 @@ class AddressController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+<<<<<<< HEAD
         Log::info($request->query());
         $address = Address::all();
 
@@ -25,6 +32,14 @@ class AddressController extends Controller
             'data' => $address,
             'total' => $address->count()
         ]);
+=======
+        $filter = new AddressFilter;
+        $filterItems = $filter->transform($request);
+
+        $address = Address::query()->where($filterItems)->paginate();
+
+        return $this->successResponse(AddressResource::collection($address)->response()->getData(true), 'Successfully retrive address');
+>>>>>>> origin/filter
     }
 
     /**
@@ -36,13 +51,7 @@ class AddressController extends Controller
 
         $address = Address::create($data);
 
-        return $this->createdResponse($address, "created");
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Address Create Successfully',
-            'data' => $address,
-        ], 201);
+        return $this->createdResponse($address, 'created');
     }
 
     /**
@@ -50,6 +59,8 @@ class AddressController extends Controller
      */
     public function show(Address $address)
     {
+        return $this->successResponse(new AddressResource($address), 'Address get successfully');
+
         return response()->json([
             'status' => true,
             'message' => 'Address',
@@ -74,15 +85,15 @@ class AddressController extends Controller
      */
     public function destroy(Address $address)
     {
-        $address->delete();
+        $address->delete($address->id);
 
         return response()->json(
             [
                 'success' => true,
                 'message' => 'Deleted Successfully',
                 'data' => [
-                    'id' => $address->id
-                ]
+                    'id' => $address->id,
+                ],
             ],
             200
         );
