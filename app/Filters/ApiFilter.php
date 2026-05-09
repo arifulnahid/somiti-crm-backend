@@ -1,16 +1,10 @@
 <?php
-<<<<<<< HEAD
-namespace App\Filters\V1;
-use Illuminate\Http\Request;
-
-=======
 
 namespace App\Filters;
 
 use Illuminate\Http\Request;
 
 
->>>>>>> origin/filter
 class ApiFilter {
     protected $safeParms = [];
 
@@ -39,8 +33,4 @@ class ApiFilter {
 
         return $eloQuery;
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/filter
 }
