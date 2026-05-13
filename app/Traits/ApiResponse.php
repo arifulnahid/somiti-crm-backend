@@ -16,7 +16,7 @@ trait ApiResponse
         return response()->json([
             'success' => true,
             'message' => $message,
-            'data' => $data,
+            ...$data,
             'timestamp' => now()->toIso8601String(),
             'status_code' => $statusCode,
         ], $statusCode);

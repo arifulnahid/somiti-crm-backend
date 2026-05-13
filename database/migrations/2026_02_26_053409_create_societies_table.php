@@ -22,7 +22,7 @@ return new class extends Migration
 
             $table->jsonb('committee')->nullable();
             $table->jsonb('meta')->nullable();
-
+            $table->softDeletesTz();
             $table->timestampsTz();
         });
     }
