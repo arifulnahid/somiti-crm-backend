@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AddressController;
 use App\Http\Controllers\API\BranchController;
+use App\Http\Controllers\api\DashboardController;
 use App\Http\Controllers\API\MemberController;
 use App\Http\Controllers\API\NomineeController;
 use App\Http\Controllers\API\SocietyController;
@@ -44,3 +45,7 @@ Route::apiResource('members', MemberController::class);
 Route::apiResource('societies', SocietyController::class);
 Route::apiResource('nominees', NomineeController::class);
 Route::apiResource('transactions', TransactionController::class);
+
+
+Route::get('/dashboard/stats', DashboardController::class)
+     ->middleware(['auth:sanctum', 'can:viewDashboard,App\Models\Transaction']);
