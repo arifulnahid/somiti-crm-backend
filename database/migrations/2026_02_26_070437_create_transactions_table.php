@@ -29,6 +29,8 @@ return new class extends Migration
             $table->nullableMorphs('receiver');
 
             $table->longText('description')->nullable();
+            $table->string('device');
+            $table->string('coordinate');
             $table->json('meta')->nullable();
 
             $table->softDeletesTz();

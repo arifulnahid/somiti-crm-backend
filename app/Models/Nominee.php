@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Nominee extends Model
 {
@@ -36,5 +37,10 @@ class Nominee extends Model
     public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class);
+    }
+
+    public function deposits(): BelongsToMany
+    {
+        return $this->belongsToMany(Deposit::class, 'deposit_nominee', 'nominee_id', 'deposit_id');
     }
 }
