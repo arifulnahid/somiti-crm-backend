@@ -35,7 +35,7 @@ return new class extends Migration
             $table->timestampsTz();
         });
 
-        Schema::create('balance', function (Blueprint $table){
+        Schema::create('wallets', function (Blueprint $table){
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('member_id')->nullable()->constrained('members')->nullOnDelete();

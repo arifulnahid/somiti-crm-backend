@@ -34,8 +34,8 @@ return new class extends Migration
             $table->softDeletesTz();
             $table->timestampsTz();
 
-            $table->index('sender_id');
-            $table->index('receiver_id');
+            $table->index(['sender_id', 'sender_type']);
+            $table->index(['receiver_id', 'receiver_type']);
         });
     }
 
