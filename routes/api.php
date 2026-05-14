@@ -2,14 +2,14 @@
 
 use App\Http\Controllers\API\AddressController;
 use App\Http\Controllers\API\BranchController;
-use App\Http\Controllers\api\DashboardController;
+use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\MemberController;
 use App\Http\Controllers\API\NomineeController;
 use App\Http\Controllers\API\SocietyController;
 use App\Http\Controllers\API\TransactionController;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\DepositController;
-use App\Http\Controllers\LoanController;
+use App\Http\Controllers\API\DepositController;
+use App\Http\Controllers\API\LoanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

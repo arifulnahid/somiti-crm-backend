@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\Loan;
 use App\Http\Requests\StoreLoanRequest;
 use App\Http\Requests\UpdateLoanRequest;
