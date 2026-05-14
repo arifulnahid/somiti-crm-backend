@@ -29,13 +29,15 @@ return new class extends Migration
             $table->nullableMorphs('receiver');
 
             $table->longText('description')->nullable();
+            $table->string('device');
+            $table->string('coordinate');
             $table->json('meta')->nullable();
 
             $table->softDeletesTz();
             $table->timestampsTz();
 
-            $table->index('sender_id');
-            $table->index('receiver_id');
+            $table->index(['sender_id', 'sender_type']);
+            $table->index(['receiver_id', 'receiver_type']);
         });
     }
 

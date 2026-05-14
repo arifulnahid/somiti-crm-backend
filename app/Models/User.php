@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,15 +23,15 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'phone', 
+        'phone',
         'dob',
         'nid',
-        'passport_id', 
+        'passport_id',
         'birth_id',
-        'active', 
+        'active',
         'role',
         'password',
-        'meta'
+        'meta',
     ];
 
     /**
@@ -52,7 +54,16 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'dob' => 'date'
+            'dob' => 'date',
+            'role' => UserRole::class,
         ];
+    }
+
+    /**
+     * Helper method to check multiple roles using Enums.
+     */
+    public function hasRole(array $roles): bool
+    {
+        return in_array($this->role, $roles, true);
     }
 }

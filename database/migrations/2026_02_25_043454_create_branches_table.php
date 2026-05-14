@@ -30,7 +30,7 @@ return new class extends Migration
         });
 
 
-        Schema::create('branch_account', function (Blueprint $table){
+        Schema::create('branch_wallets', function (Blueprint $table){
             $table->id();
             $table->foreignId('address_id')->constrained('addresses')->onDelete('cascade');
             $table->decimal('cash', 10, 2)->default(0);
