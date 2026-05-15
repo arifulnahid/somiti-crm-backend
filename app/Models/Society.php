@@ -43,6 +43,7 @@ class Society extends Model
         'description',
         'address',
         'committee',
+        'established_at',
         'meta',
     ];
 

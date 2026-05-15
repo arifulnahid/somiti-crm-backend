@@ -21,6 +21,8 @@ return new class extends Migration
             $table->foreignId('address')->nullable()->constrained('addresses')->nullOnDelete();
 
             $table->jsonb('committee')->nullable();
+            $table->boolean('is_active')->default(false);
+            $table->date('established_at')->nullable()->default(null);
             $table->jsonb('meta')->nullable();
             $table->softDeletesTz();
             $table->timestampsTz();

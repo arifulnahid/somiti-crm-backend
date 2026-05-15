@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class StoreSocietyRequest extends FormRequest
 {
@@ -23,12 +25,31 @@ class StoreSocietyRequest extends FormRequest
     {
          return [
             'name' => 'required|string|max:255|unique:societies,name',
-            'logo' => 'nullable|string|max:255',
-            'cover_image' => 'nullable|string|max:255',
+            'logo' => 'sometimes|nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+            'cover_image' => 'sometimes|nullable|string|max:255',
             'description' => 'required|string',
             'address' => 'required|exists:addresses,id',
             'committee' => 'nullable|array',
+            'established_at' => 'date',
             'meta' => 'nullable|array',
         ];
+    }
+
+    #[Override]
+    protected function prepareForValidation()
+    {
+        if($this->has('established_at') && $this->input('established_at')){
+           try {
+            $formattedDate = Carbon::parse($this->input('established_at'))->toDateString();
+
+            $this->merge([
+                'established_at' => $formattedDate
+            ]);
+           } catch (\Throwable $th) {
+            //throw $th;
+           }
+        }
+
+        return parent::prepareForValidation();
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Override;
 
 class UpdateSocietyRequest extends FormRequest
 {
@@ -22,21 +24,40 @@ class UpdateSocietyRequest extends FormRequest
      */
     public function rules(): array
     {
-        $societyId = $this->route('societies')->id;
 
         return [
             'name' => [
-                'required',
+                'sometimes',
                 'string',
                 'max:255',
-                Rule::unique('societies', 'name')->ignore($societyId),
+                Rule::unique('societies', 'name'),
             ],
-            'logo' => 'nullable|string|max:255',
-            'cover_image' => 'nullable|string|max:255',
-            'description' => 'required|string',
-            'address' => 'required|exists:addresses,id',
-            'committee' => 'nullable|array',
-            'meta' => 'nullable|array',
+            'logo' => 'sometimes|nullable|string|max:255',
+            'cover_image' => 'sometimes|nullable|string|max:255',
+            'description' => 'sometimes|required|string',
+            'address' => 'sometimes|required|exists:addresses,id',
+            'committee' => 'sometimes|nullable|array',
+            'established_at' => 'sometimes|date',
+            'meta' => 'sometimes|nullable|array',
         ];
+    }
+
+
+    #[Override]
+    protected function prepareForValidation()
+    {
+        if($this->has('established_at') && $this->input('established_at')){
+           try {
+            $formattedDate = Carbon::parse($this->input('established_at'))->toDateString();
+
+            $this->merge([
+                'established_at' => $formattedDate
+            ]);
+           } catch (\Throwable $th) {
+            //throw $th;
+           }
+        }
+
+        return parent::prepareForValidation();
     }
 }
