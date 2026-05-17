@@ -8,14 +8,17 @@ use App\Http\Requests\UpdateSocietyRequest;
 use App\Http\Resources\SocietyResource;
 use App\Models\Society;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SocietyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        Log::info($request->query());
         $societies = Society::with(['address', 'members'])->simplePaginate(10, ['*'], 'page', 2);
 
         return $this->successResponse(SocietyResource::collection($societies));
