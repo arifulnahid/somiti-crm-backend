@@ -26,7 +26,7 @@ class StoreSocietyRequest extends FormRequest
          return [
             'name' => 'required|string|max:255|unique:societies,name',
             'logo' => 'sometimes|nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
-            'cover_image' => 'sometimes|nullable|string|max:255',
+            'cover_image' => 'sometimes|nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
             'description' => 'required|string',
             'address' => 'required|exists:addresses,id',
             'committee' => 'nullable|array',

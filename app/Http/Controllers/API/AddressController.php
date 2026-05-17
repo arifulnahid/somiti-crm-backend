@@ -6,12 +6,11 @@ use App\Filters\V1\AddressFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
-use App\Http\Resources\AddressCollection;
 use App\Http\Resources\AddressResource;
 use App\Models\Address;
-use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AddressController extends Controller
 {
@@ -22,10 +21,13 @@ class AddressController extends Controller
     {
         $filter = new AddressFilter;
         $filterItems = $filter->transform($request);
+        $perPage = $request->query('pageSize', 10);
+        $currentPage = $request->query('currentPage', 1);
 
-        $address = Address::query()->where($filterItems)->paginate();
+        $address = Address::query()->where($filterItems)->latest()->paginate($perPage, ['*'], 'page', $currentPage);
+        $resource = AddressResource::collection($address);
 
-        return $this->successResponse(AddressResource::collection($address)->response()->getData(true), 'Successfully retrive address');
+        return $this->success($resource);
     }
 
     /**

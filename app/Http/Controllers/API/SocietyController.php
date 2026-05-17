@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSocietyRequest;
 use App\Http\Requests\UpdateSocietyRequest;
+use App\Http\Resources\SocietyResource;
 use App\Models\Society;
 use Illuminate\Http\JsonResponse;
 
@@ -15,9 +16,9 @@ class SocietyController extends Controller
      */
     public function index(): JsonResponse
     {
-        $societies = Society::with(['address', 'members'])->get();
+        $societies = Society::with(['address', 'members'])->simplePaginate(10, ['*'], 'page', 2);
 
-        return response()->json($societies);
+        return $this->successResponse(SocietyResource::collection($societies));
     }
 
     /**
