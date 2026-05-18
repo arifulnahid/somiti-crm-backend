@@ -16,15 +16,29 @@ trait ApiResponse
      *
      * @param  mixed  $data
      */
-    protected function successResponse($data = null, string $message = 'Success', int $statusCode = 200): JsonResponse
+    protected function successResponse(mixed $data = null, string $message = 'Success', int $statusCode = 200): JsonResponse
     {
+        $headers = [];
+        $responseData = $data;
+
+        // Extract paginator if wrapped inside an AnonymousResourceCollection
+        $paginator = $data instanceof AnonymousResourceCollection ? $data->resource : $data;
+
+        // Check if we are dealing with a LengthAwarePaginator
+        if ($paginator instanceof LengthAwarePaginator) {
+            $headers = [
+                'X-Total-Count' => $paginator->total(),
+                'Access-Control-Expose-Headers' => 'X-Total-Count',
+            ];
+        }
+
         return response()->json([
             'success' => true,
             'message' => $message,
-            'data' => $data,
+            'data' => $responseData,
             'timestamp' => now()->toIso8601String(),
             'status_code' => $statusCode,
-        ], $statusCode);
+        ], $statusCode, $headers);
     }
 
     /**
@@ -152,11 +166,16 @@ trait ApiResponse
         return $this->successResponse($data, $message, 201);
     }
 
-    /**
-     * No content response (204)
+   /**
+     * No content response
      */
-    protected function noContentResponse(): JsonResponse
+    protected function noContentResponse(string $message = 'No content found'): JsonResponse
     {
-        return response()->json(null, 204);
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'status_code' => 204,
+            'timestamp' => now()->toIso8601String(),
+        ], 204);
     }
 }
