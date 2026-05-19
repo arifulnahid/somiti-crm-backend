@@ -93,14 +93,40 @@ class AddressController extends Controller
         );
     }
 
+    public function getDivisionsAndDistricts(): JsonResponse
+    {
+        // 1. Fetch only unique division and district combinations from the DB
+        $data = Address::query()
+            ->select('division', 'district')
+            ->groupBy('division', 'district')
+            ->orderBy('division', 'asc')
+            ->orderBy('district', 'asc')
+            ->get();
+
+        // 2. Format the collection into a 'division' => ['district1', 'district2'] structure
+        $structuredData = $data->groupBy('division')
+            ->map(function ($items) {
+                // Pull out just the district strings into a flat, sequential array
+                return $items->pluck('district')->values()->toArray();
+            });
+
+        return $this->successResponse($structuredData);
+    }
+
     public function divisions()
     {
         // $addresses = Address::seletct('division', 'district')->distinct()->get();
 
-        $address = Address::all('division', 'district')->groupBy('division')
-            ->map(function ($items) {
-                return $items->pluck('district')->unique()->values();
-            });
+        $address = Address::query()->distinct()->pluck('division')->toArray();
+
+        return response()->json($address);
+    }
+
+    public function districts()
+    {
+        // $addresses = Address::seletct('division', 'district')->distinct()->get();
+
+        $address = Address::query()->where('')->pluck('division')->toArray();
 
         return response()->json($address);
     }
