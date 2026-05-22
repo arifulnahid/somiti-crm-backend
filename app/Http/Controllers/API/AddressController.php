@@ -10,7 +10,6 @@ use App\Http\Resources\AddressResource;
 use App\Models\Address;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class AddressController extends Controller
 {
@@ -19,15 +18,22 @@ class AddressController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        // 1. Process query filters
         $filter = new AddressFilter;
         $filterItems = $filter->transform($request);
-        $perPage = $request->query('pageSize', 10);
-        $currentPage = $request->query('currentPage', 1);
 
-        $address = Address::query()->where($filterItems)->latest()->paginate($perPage, ['*'], 'page', $currentPage);
-        $resource = AddressResource::collection($address);
+        // 2. Fetch cleanly validated pagination inputs
+        $perPage = (int) $request->query('pageSize', 10);
+        $currentPage = (int) $request->query('currentPage', 1);
 
-        return $this->success($resource);
+        // 3. Must use paginate() instead of simplePaginate() to get total records
+        $addresses = Address::query()
+            ->where($filterItems)
+            ->latest()
+            ->paginate($perPage, ['*'], 'page', $currentPage);
+
+        // 4. Wrap with Eloquent Resource Collection and hand off to trait
+        return $this->successResponse(AddressResource::collection($addresses));
     }
 
     /**
@@ -87,14 +93,40 @@ class AddressController extends Controller
         );
     }
 
+    public function getDivisionsAndDistricts(): JsonResponse
+    {
+        // 1. Fetch only unique division and district combinations from the DB
+        $data = Address::query()
+            ->select('division', 'district')
+            ->groupBy('division', 'district')
+            ->orderBy('division', 'asc')
+            ->orderBy('district', 'asc')
+            ->get();
+
+        // 2. Format the collection into a 'division' => ['district1', 'district2'] structure
+        $structuredData = $data->groupBy('division')
+            ->map(function ($items) {
+                // Pull out just the district strings into a flat, sequential array
+                return $items->pluck('district')->values()->toArray();
+            });
+
+        return $this->successResponse($structuredData);
+    }
+
     public function divisions()
     {
         // $addresses = Address::seletct('division', 'district')->distinct()->get();
 
-        $address = Address::all('division', 'district')->groupBy('division')
-        ->map(function ($items) {
-            return $items->pluck('district')->unique()->values();
-        });
+        $address = Address::query()->distinct()->pluck('division')->toArray();
+
+        return response()->json($address);
+    }
+
+    public function districts()
+    {
+        // $addresses = Address::seletct('division', 'district')->distinct()->get();
+
+        $address = Address::query()->where('')->pluck('division')->toArray();
 
         return response()->json($address);
     }

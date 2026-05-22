@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Filters\V1\SocietyFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSocietyRequest;
 use App\Http\Requests\UpdateSocietyRequest;
@@ -9,7 +10,7 @@ use App\Http\Resources\SocietyResource;
 use App\Models\Society;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Response;
 
 class SocietyController extends Controller
 {
@@ -18,8 +19,15 @@ class SocietyController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        Log::info($request->query());
-        $societies = Society::with(['address', 'members'])->simplePaginate(10, ['*'], 'page', 2);
+        // 1. Process query filters
+        $filter = new SocietyFilter;
+        $filterItems = $filter->transform($request);
+
+        // 2. Fetch cleanly validated pagination inputs
+        $perPage = (int) $request->query('pageSize', 10);
+        $currentPage = (int) $request->query('currentPage', 1);
+
+        $societies = Society::with(['address', 'members'])->paginate($perPage, ['*'], 'page', $currentPage);
 
         return $this->successResponse(SocietyResource::collection($societies));
     }
@@ -31,7 +39,7 @@ class SocietyController extends Controller
     {
         $society = Society::create($request->validated());
 
-        return response()->json($society, 201);
+        return $this->successResource($society, 'Society created successfully', Response::HTTP_CREATED);
     }
 
     /**
@@ -41,7 +49,7 @@ class SocietyController extends Controller
     {
         $society->load(['address', 'members']);
 
-        return response()->json($society);
+        return $this->successResource($society, 'Society get successfully', Response::HTTP_FOUND);
     }
 
     /**
@@ -51,7 +59,7 @@ class SocietyController extends Controller
     {
         $society->update($request->validated());
 
-        return response()->json($society);
+         return $this->successResource($society, 'Society get successfully', Response::HTTP_ACCEPTED);
     }
 
     /**
