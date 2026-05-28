@@ -32,7 +32,7 @@ class StoreUserRequest extends FormRequest
             'nid' => 'required_without_all:passport_id,birth_id|nullable|digits_between:10,16|unique:users,nid',
             'birth_id' => 'required_without_all:passport_id,nid|nullable|digits_between:10,16|unique:users,birth_id',
             'passport_id' => 'required_without_all:birth_id,nid|nullable|digits_between:10,16|unique:users,passport_id',
-            'active' => 'sometimes|boolean:strict',
+            'is_active' => 'sometimes|boolean:strict',
             'role' => ['sometimes', new Enum(UserRole::class)],
             'password' => 'sometimes|digits:5'
         ];

@@ -28,7 +28,7 @@ class User extends Authenticatable
         'nid',
         'passport_id',
         'birth_id',
-        'active',
+        'is_active',
         'role',
         'password',
         'meta',

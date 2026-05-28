@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
         $users = User::all();
 
@@ -29,16 +30,12 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request): JsonResponse
+    public function store(StoreUserRequest $request): UserResource
     {
         $data = $request->validated();
         $user = User::create($data);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'User Created Successfully',
-            'data' => $user
-        ], 201);
+        return new UserResource($user);
     }
 
     /**
@@ -52,7 +49,7 @@ class UserController extends Controller
             'password' => 'required|digits:5'
         ]);
 
-        $user = User::where('email', $request->username)->first();
+        $user = User::where('email', '=', $request->username, true)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
@@ -94,9 +91,9 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(User $user): JsonResponse
     {
-        //
+        return UserResource::make($user)->response()->setStatusCode(200);
     }
 
     /**
@@ -104,7 +101,10 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $data = $request->validated();
+        $user->update($data);
+
+        return UserResource::make($user);
     }
 
     /**
