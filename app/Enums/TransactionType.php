@@ -10,4 +10,5 @@ enum TransactionType: string
     case RECEIVE = 'receive';
     case ADD = 'add';
     case OTHERS = 'others';
+    case REFUND = 'refund';
 }

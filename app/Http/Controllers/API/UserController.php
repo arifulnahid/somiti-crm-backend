@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -71,16 +72,31 @@ class UserController extends Controller
         ], 200);
     }
 
-    /**
-     * Auth me
-     */
-    public function auth(Request $request): JsonResponse
-    {
+/**
+ * Get the authenticated user.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @return \Illuminate\Http\JsonResponse
+ */
+public function auth(Request $request): JsonResponse
+{
+    // 1. Check if the user is authenticated via the token
+    $user = $request->user();
+
+    if (!$user) {
         return response()->json([
-            'message' => 'Authenticated Successfully',
-            'data' => $request->user()
-        ]);
+            'status' => 'error',
+            'message' => 'Unauthenticated or invalid token.',
+        ], Response::HTTP_UNAUTHORIZED); // 401
     }
+
+    // 2. Return the user data
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Authenticated Successfully',
+        'data' => $user
+    ], Response::HTTP_OK); // 200
+}
 
     public function logout(Request $request): JsonResponse
     {

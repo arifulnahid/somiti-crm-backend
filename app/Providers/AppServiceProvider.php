@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'user' => 'App\Models\User',
             'branch' => 'App\Models\Branch',
+            'banks' => 'App\Models\Bank',
         ]);
 
         JsonResource::withoutWrapping();

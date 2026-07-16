@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('deposits', function (Blueprint $table) {
+        Schema::create('savings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('installment')->nullable(false);
             $table->enum('duration', ['1Y', '2Y', '3Y', '4Y', '5Y', '10Y']);
             $table->date('deadline');
             $table->json('meta')->nullable();
-            $table->timestamps();
 
             $table->index(['user_id', 'deadline']);
             $table->index('duration');
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('deposits');
+        Schema::dropIfExists('savings');
     }
 };
