@@ -40,10 +40,10 @@ class Member extends Model
         return $this->belongsTo(Branch::class);
     }
 
-    // public function society(): BelongsTo
-    // {
-    //     return $this->belongsTo(Society::class, 'society_id', 'id');
-    // }
+    public function society(): BelongsTo
+    {
+        return $this->belongsTo(Society::class, 'society_id', 'id');
+    }
 
     public function permanentAddress(): BelongsTo
     {

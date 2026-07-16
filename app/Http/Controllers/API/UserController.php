@@ -93,6 +93,7 @@ class UserController extends Controller
      */
     public function show(User $user): JsonResponse
     {
+        $user->load('member'); // Eager load the member relationship
         return UserResource::make($user)->response()->setStatusCode(200);
     }
 

@@ -31,7 +31,7 @@ class StoreMemberRequest extends FormRequest
             'present_address' => 'nullable|exists:addresses,id',
             'branch_id' => 'nullable|exists:branches,id',
             'nominees' => 'nullable|array',
-            'society_id' => 'required|exists:societies,id',
+            'society_id' => 'sometimes|exists:societies,id',
             'occupation' => 'nullable|string|max:255',
             'type' => 'required|in:general,student',
             'meta' => 'nullable|array',

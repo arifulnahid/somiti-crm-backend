@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMemberRequest;
 use App\Http\Requests\UpdateMemberRequest;
+use App\Http\Resources\MemberResource;
 use App\Models\Member;
 use Illuminate\Http\JsonResponse;
 
@@ -27,7 +28,8 @@ class MemberController extends Controller
     {
         $member = Member::create($request->validated());
 
-        return response()->json($member, 201);
+        return MemberResource::make($member->load(['user', 'branch', 'society', 'permanentAddress', 'presentAddress']))
+        ->response()->setStatusCode(201);
     }
 
     /**
@@ -51,7 +53,8 @@ class MemberController extends Controller
 
         $member->update($validated);
 
-        return response()->json($member);
+        return MemberResource::make($member->load(['user', 'branch', 'society', 'permanentAddress', 'presentAddress']))
+        ->response();
     }
 
     /**

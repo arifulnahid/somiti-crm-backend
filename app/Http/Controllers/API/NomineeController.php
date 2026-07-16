@@ -5,19 +5,22 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreNomineeRequest;
 use App\Http\Requests\UpdateNomineeRequest;
+use App\Http\Resources\NomineeResource;
 use App\Models\Nominee;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class NomineeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $nominees = Nominee::with(['user', 'member'])->get();
+        $memberId = $request->query('member');
+        $nominees = Nominee::where('member_id', $memberId)->get();
 
-        return response()->json($nominees);
+        return NomineeResource::collection($nominees)->response();
     }
 
     /**
@@ -27,7 +30,7 @@ class NomineeController extends Controller
     {
         $nominee = Nominee::create($request->validated());
 
-        return response()->json($nominee, 201);
+        return NomineeResource::make($nominee)->response()->setStatusCode(201);
     }
 
     /**
@@ -37,7 +40,7 @@ class NomineeController extends Controller
     {
         $nominee->load(['user', 'member']);
 
-        return response()->json($nominee);
+        return NomineeResource::make($nominee)->response();
     }
 
     /**
@@ -47,7 +50,7 @@ class NomineeController extends Controller
     {
         $nominee->update($request->validated());
 
-        return response()->json($nominee);
+        return NomineeResource::make($nominee)->response();
     }
 
     /**
@@ -57,6 +60,6 @@ class NomineeController extends Controller
     {
         $nominee->delete();
 
-        return response()->json(null, 204);
+        return NomineeResource::make($nominee)->response()->setStatusCode(204);
     }
 }

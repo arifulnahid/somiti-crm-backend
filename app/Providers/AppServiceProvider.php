@@ -29,8 +29,7 @@ class AppServiceProvider extends ServiceProvider
             'branch' => 'App\Models\Branch',
         ]);
 
-        JsonResource::withoutWrapping();
-
+        // JsonResource::withoutWrapping();
         Gate::policy(Branch::class, DashboardPolicy::class);
     }
 }
