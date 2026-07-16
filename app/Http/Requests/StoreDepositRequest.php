@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Override;
 
 class StoreDepositRequest extends FormRequest
 {
@@ -12,7 +13,20 @@ class StoreDepositRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return !!$this->user();
+    }
+
+    #[Override]
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'user_id' => $this->user()->id,
+            'sender_id' => $this->user()->id ?? null,
+            'sender_type' => 'user',
+            'receiver_id' => $this->user()->id ?? null,
+            'receiver_type' => 'user'
+        ]);
+        return parent::prepareForValidation();
     }
 
     /**
@@ -24,20 +38,16 @@ class StoreDepositRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'installment' => 'required|integer|min:1',
-            'duration' => ['required', Rule::in(['1Y', '2Y', '3Y', '4Y', '5Y', '10Y'])],
-            'deadline' => 'required|date|after:today',
-            'meta' => 'nullable|array',
-            'nominee_ids' => 'nullable|array',
-            'nominee_ids.*' => 'exists:nominees,id'
+            'amount' => 'required|integer',
+            'fees' => 'required|numeric|decimal:1,2',
+            'sender_id' => 'sometimes',
+            'sender_type' => 'sometimes|string',
+            'receiver_id' => 'sometimes',
+            'receiver_type' => 'sometimes|string|nullable',
+            'notes' => 'required|string',
+            'reference' => 'required|string',
+            'meta' => 'nullable|json',
         ];
     }
 
-    public function messages(): array
-    {
-        return [
-            'deadline.after' => 'Deadline must be a future date',
-            'duration.in' => 'Invalid duration. Allowed: 1Y, 2Y, 3Y, 4Y, 5Y, 10Y'
-        ];
-    }
 }

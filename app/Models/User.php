@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -71,5 +72,35 @@ class User extends Authenticatable
     public function hasRole(array $roles): bool
     {
         return in_array($this->role, $roles, true);
+    }
+
+    public function sentTransactions(): MorphMany
+    {
+        return $this->morphMany(Transaction::class, 'sender');
+    }
+
+    public function receivedTransactions(): MorphMany
+    {
+        return $this->morphMany(Transaction::class, 'receiver');
+    }
+
+    public function addBalance(float $amount): self
+    {
+        $this->balance += $amount;
+        $this->save();
+
+        return $this;
+    }
+
+    public function subtractBalance(float $amount): self
+    {
+        if ($this->balance < $amount) {
+            throw new \Exception('Insufficient balance');
+        }
+
+        $this->balance -= $amount;
+        $this->save();
+
+        return $this;
     }
 }

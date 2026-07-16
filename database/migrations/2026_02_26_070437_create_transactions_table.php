@@ -15,11 +15,17 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('transaction_id');
+            $table->uuid('transaction_id')->unique();
             $table->string('title');
 
             $table->decimal('amount', 15, 2);
+            $table->decimal('fees', 15, 2)->default(0);
             $table->decimal('current_balance', 15, 2);
+
+            $table->decimal('sender_before_balance', 15, 2)->nullable();
+            $table->decimal('sender_after_balance', 15, 2)->nullable();
+            $table->decimal('receiver_before_balance', 15, 2)->nullable();
+            $table->decimal('receiver_after_balance', 15, 2)->nullable();
 
             $table->enum('type', array_column(TransactionType::cases(), 'value'));
             $table->enum('status', array_column(TransactionStatus::cases(), 'value'))->default(TransactionStatus::PENDING);
@@ -28,8 +34,9 @@ return new class extends Migration
             $table->nullableMorphs('sender');
             $table->nullableMorphs('receiver');
 
-            $table->longText('description')->nullable();
-            $table->string('device');
+            $table->text('notes')->nullable();
+            $table->string('reference')->nullable();
+            $table->json('device')->nullable();
             $table->string('coordinate');
             $table->json('meta')->nullable();
 
