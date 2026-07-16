@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -29,7 +30,7 @@ class User extends Authenticatable
         'nid',
         'passport_id',
         'birth_id',
-        'active',
+        'is_active',
         'role',
         'password',
         'meta',
@@ -58,6 +59,11 @@ class User extends Authenticatable
             'dob' => 'date',
             'role' => UserRole::class,
         ];
+    }
+
+    public function member(): HasOne
+    {
+        return $this->hasOne(Member::class);
     }
 
     /**

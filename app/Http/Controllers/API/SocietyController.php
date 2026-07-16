@@ -49,7 +49,7 @@ class SocietyController extends Controller
     {
         $society->load(['address', 'members']);
 
-        return $this->successResource($society, 'Society get successfully', Response::HTTP_FOUND);
+        return $this->successResource($society, 'Society get successfully', Response::HTTP_ACCEPTED);
     }
 
     /**

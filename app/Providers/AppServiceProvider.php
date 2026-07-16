@@ -30,8 +30,7 @@ class AppServiceProvider extends ServiceProvider
             'banks' => 'App\Models\Bank',
         ]);
 
-        JsonResource::withoutWrapping();
-
+        // JsonResource::withoutWrapping();
         Gate::policy(Branch::class, DashboardPolicy::class);
     }
 }

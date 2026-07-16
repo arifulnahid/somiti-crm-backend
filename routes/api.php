@@ -23,6 +23,7 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
     Route::get('auth/me', 'auth')->middleware('auth:sanctum');
     Route::get('/', 'index');
     Route::post('/register', 'store');
+     Route::get('/{user}', 'show');
     Route::post('/login', 'login');
     Route::post('/logout', 'logout');
 });
