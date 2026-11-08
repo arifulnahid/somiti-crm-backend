@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('amount')->unsigned();
             $table->integer('installment')->unsigned();
             $table->enum('duration', ['1M', '6M', '1Y', '2Y', '3Y', '5Y', '10Y']);
-            $table->timestamps();
 
             $table->index(['user_id', 'amount']);
             $table->index('duration');
